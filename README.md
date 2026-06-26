@@ -1,8 +1,8 @@
 ## Grupo 7:
-Douglas Costa
-João Pedro Mazzotti 
-Matheus da Silveira Santos
-Thiago Rocha
+Douglas Costa,
+João Pedro Mazzotti,
+Matheus da Silveira Santos,
+Thiago Rocha.
 
 # 🤖 Chatbot SPA — Frontend
 
