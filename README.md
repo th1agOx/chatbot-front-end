@@ -1,13 +1,9 @@
-Grupo 7:
+## Grupo 7:
 Douglas Costa
 João Pedro Mazzotti 
 Matheus da Silveira Santos
 Thiago Rocha
 
-# chatbot-front-end
-Repositório dedicado ao front do chatbot.
-
-# Wrote chatbot-front-end\README.md
 # 🤖 Chatbot SPA — Frontend
 
 Aplicação Single Page de chatbot com React 18, TypeScript, Context API + useReducer e Styled-Components.
