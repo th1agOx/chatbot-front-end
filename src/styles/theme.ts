@@ -1,0 +1,50 @@
+const theme = {
+  colors: {
+    primary: '#4F46E5',
+    primaryHover: '#4338CA',
+    secondary: '#6B7280',
+    secondaryHover: '#4B5563',
+    background: '#F9FAFB',
+    surface: '#FFFFFF',
+    text: '#111827',
+    textSecondary: '#6B7280',
+    border: '#E5E7EB',
+    error: '#EF4444',
+    success: '#10B981',
+    userBubble: '#4F46E5',
+    userText: '#FFFFFF',
+    assistantBubble: '#F3F4F6',
+    assistantText: '#111827',
+  },
+  spacing: {
+    xs: '4px',
+    sm: '8px',
+    md: '16px',
+    lg: '24px',
+    xl: '32px',
+    xxl: '48px',
+  },
+  borderRadius: {
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
+    xl: '16px',
+    full: '9999px',
+  },
+  fontSize: {
+    xs: '0.75rem',
+    sm: '0.875rem',
+    md: '1rem',
+    lg: '1.125rem',
+    xl: '1.25rem',
+    xxl: '1.5rem',
+  },
+  breakpoints: {
+    sm: '640px',
+    md: '768px',
+    lg: '1024px',
+    xl: '1280px',
+  },
+}
+
+export default theme
