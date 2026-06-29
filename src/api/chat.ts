@@ -7,18 +7,25 @@ import type {
   UploadDocumentResponse,
 } from './types'
 
+
+export async function createConversation(title: string): Promise<Conversation> {
+  const response = await apiClient.post<Conversation>('/api/conversations', { title })
+  return response.data
+}
+
+
 export async function sendMessage(data: SendMessageRequest): Promise<SendMessageResponse> {
   const response = await apiClient.post<SendMessageResponse>('/api/chat/send', data)
   return response.data
 }
 
 export async function listConversations(): Promise<Conversation[]> {
-  const response = await apiClient.get<Conversation[]>('/api/chat/conversations')
+  const response = await apiClient.get<Conversation[]>('/api/conversations')
   return response.data
 }
 
 export async function getConversationHistory(id: string): Promise<GetConversationHistoryResponse> {
-  const response = await apiClient.get<GetConversationHistoryResponse>(`/api/chat/conversations/${id}`)
+  const response = await apiClient.get<GetConversationHistoryResponse>(`/api/chat/history/${id}`)
   return response.data
 }
 
@@ -30,12 +37,12 @@ export async function uploadDocument(
   formData.append('file', file)
   formData.append('conversationId', conversationId)
 
-  const response = await apiClient.post<UploadDocumentResponse>('/api/chat/upload', formData, {
+  const response = await apiClient.post<UploadDocumentResponse>('/api/files/upload', formData, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })
   return response.data
 }
 
 export async function deleteConversation(id: string): Promise<void> {
-  await apiClient.delete(`/api/chat/conversations/${id}`)
+  await apiClient.delete(`/api/conversations/${id}`)
 }
