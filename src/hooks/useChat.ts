@@ -1,7 +1,8 @@
 import { useCallback } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { sendMessage as sendMessageApi } from '../api/chat'
+import { createConversation, sendMessage as sendMessageApi } from '../api/chat'
 import type { Message } from '../api/types'
+
 
 export function useChat() {
   const { state, dispatch } = useChatContext()
@@ -19,21 +20,22 @@ export function useChat() {
       dispatch({ type: 'SET_LOADING', payload: true })
       dispatch({ type: 'SET_ERROR', payload: null })
 
+if (!state.activeId) {
+  const newConv = await createConversation('Nova conversa')
+  dispatch({ type: 'SELECT_CONVERSATION', payload: newConv.id })
+}
+
+
       try {
         const response = await sendMessageApi({
           conversationId: state.activeId,
-          content: text,
+          message: text,
         })
 
-        if (!state.activeId) {
-          dispatch({ type: 'SELECT_CONVERSATION', payload: response.conversationId })
-        }
-
-        dispatch({ type: 'ADD_MESSAGE', payload: userMessage })
-        dispatch({ type: 'ADD_MESSAGE', payload: response.reply })
+        dispatch({ type: 'ADD_MESSAGE', payload: response.userMessage })
+        dispatch({ type: 'ADD_MESSAGE', payload: response.botMessage })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao enviar mensagem'
-        dispatch({ type: 'ADD_MESSAGE', payload: userMessage })
         dispatch({ type: 'SET_ERROR', payload: message })
       } finally {
         dispatch({ type: 'SET_LOADING', payload: false })

@@ -5,11 +5,10 @@ export interface Attachment {
 }
 
 export interface Message {
-  id: string
-  role: 'USER' | 'ASSISTANT'
+  id: string | number
+  role: 'USER' | 'BOT'
   content: string
   timestamp: string
-  attachment?: Attachment | null
 }
 
 export interface Conversation {
@@ -30,12 +29,12 @@ export interface FileInfo {
 
 export interface SendMessageRequest {
   conversationId: string | null
-  content: string
+  message: string
 }
 
 export interface SendMessageResponse {
-  conversationId: string
-  reply: Message
+  userMessage: Message
+  botMessage: Message
 }
 
 export interface GetConversationHistoryResponse {
@@ -54,7 +53,7 @@ export interface UploadDocumentResponse {
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: string | null
+  activeId: string| null
   messages: Message[]
   isLoading: boolean
   error: string | null
@@ -66,4 +65,4 @@ export type ChatAction =
   | { type: 'ADD_MESSAGE'; payload: Message }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SELECT_CONVERSATION'; payload: string | null }
+  | { type: 'SELECT_CONVERSATION'; payload: string | null } 

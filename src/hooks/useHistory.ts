@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { listConversations, getConversationHistory } from '../api/chat'
+import { listConversations, getConversationHistory, createConversation } from '../api/chat'
 
 export function useHistory() {
   const { state, dispatch } = useChatContext()
@@ -27,7 +27,7 @@ export function useHistory() {
       dispatch({ type: 'SET_ERROR', payload: null })
 
       try {
-        const history = await getConversationHistory(id)
+        const history = await getConversationHistory(id.toString())
         dispatch({ type: 'SET_MESSAGES', payload: history.messages })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao carregar histórico'
@@ -37,6 +37,20 @@ export function useHistory() {
       }
     },
     [dispatch],
+  )
+
+  const createConversationFn = useCallback(
+    async (title: string) => {
+      try {
+        const newConversation = await createConversation(title)
+        dispatch({ type: 'SET_CONVERSATIONS', payload: [...state.conversations, newConversation] })
+        dispatch({ type: 'SELECT_CONVERSATION', payload: newConversation.id })
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Erro ao criar conversa'
+        dispatch({ type: 'SET_ERROR', payload: message })
+      }
+    },
+    [dispatch, state.conversations],
   )
 
   useEffect(() => {
@@ -49,5 +63,6 @@ export function useHistory() {
     isLoading: state.isLoading,
     selectConversation,
     loadConversations,
+    createConversation: createConversationFn,
   }
 }

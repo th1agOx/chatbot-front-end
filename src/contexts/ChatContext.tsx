@@ -3,7 +3,7 @@ import type { Conversation, Message, ChatAction } from '../api/types'
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: string | null
+  activeId: string| null
   messages: Message[]
   isLoading: boolean
   error: string | null

@@ -5,11 +5,11 @@ import Spinner from '../common/Spinner/Spinner'
 import type { Message } from '../../api/types'
 
 interface ChatHistoryProps {
-  messages: Message[]
+  messages?: Message[]  
   isLoading: boolean
 }
 
-export default function ChatHistory({ messages, isLoading }: ChatHistoryProps) {
+export default function ChatHistory({ messages = [], isLoading }: ChatHistoryProps) {
   const bottomRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
