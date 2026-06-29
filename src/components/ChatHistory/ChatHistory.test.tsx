@@ -26,7 +26,7 @@ describe('ChatHistory', () => {
   it('should render messages when provided', () => {
     const messages: Message[] = [
       { id: '1', role: 'USER', content: 'Oi', timestamp: '2024-01-01T00:00:00Z' },
-      { id: '2', role: 'ASSISTANT', content: 'Olá!', timestamp: '2024-01-01T00:00:01Z' },
+      { id: '2', role: 'BOT', content: 'Olá!', timestamp: '2024-01-01T00:00:01Z' },
     ]
     renderWithTheme(<ChatHistory messages={messages} isLoading={false} />)
     expect(screen.getByText('Oi')).toBeInTheDocument()

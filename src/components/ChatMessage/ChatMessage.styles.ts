@@ -41,3 +41,34 @@ export const FileName = styled.span`
   font-size: ${({ theme }) => theme.fontSize.sm};
   font-weight: 500;
 `
+
+export const SourcesWrapper = styled.div`
+  margin-top: ${({ theme }) => theme.spacing.sm};
+  padding-top: ${({ theme }) => theme.spacing.sm};
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+`
+
+export const SourcesTitle = styled.span`
+  display: block;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  font-weight: 600;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  opacity: 0.85;
+`
+
+export const SourceItem = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+  padding: 2px 0;
+`
+
+export const SourceIcon = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.sm};
+`
+
+export const SourceText = styled.span`
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  opacity: 0.8;
+  word-break: break-all;
+`
