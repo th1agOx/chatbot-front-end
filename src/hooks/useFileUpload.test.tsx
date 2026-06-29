@@ -1,34 +1,27 @@
 import '@testing-library/jest-dom'
 import { renderHook, act } from '@testing-library/react'
 import { useFileUpload } from './useFileUpload'
-import { ChatProvider } from '../contexts/ChatContext'
 import * as chatApi from '../api/chat'
-import type { ReactNode } from 'react'
 
 jest.mock('../api/chat')
-
-function createWrapper() {
-  return function Wrapper({ children }: { children: ReactNode }) {
-    return <ChatProvider>{children}</ChatProvider>
-  }
-}
 
 describe('useFileUpload', () => {
   beforeEach(() => {
     jest.clearAllMocks()
   })
 
-  it('should validate and upload a txt file', async () => {
+  it('should validate and upload a file', async () => {
     const mockResponse = {
-      fileId: 'file-1',
+      id: 1,
       fileName: 'test.txt',
-      fileType: 'txt',
-      sizeBytes: 1000,
+      contentType: 'text/plain',
+      fileSize: 1000,
+      chunkCount: 5,
       uploadedAt: '2024-01-01T00:00:00Z',
     }
-    ;(chatApi.uploadDocument as jest.Mock).mockResolvedValue(mockResponse)
+    ;(chatApi.uploadAI as jest.Mock).mockResolvedValue(mockResponse)
 
-    const { result } = renderHook(() => useFileUpload(), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFileUpload())
     const file = new File(['test'], 'test.txt', { type: 'text/plain' })
 
     await act(async () => {
@@ -41,7 +34,7 @@ describe('useFileUpload', () => {
   })
 
   it('should reject invalid file type', async () => {
-    const { result } = renderHook(() => useFileUpload(), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFileUpload())
     const file = new File(['test'], 'test.exe', { type: 'application/exe' })
 
     await act(async () => {
@@ -53,7 +46,7 @@ describe('useFileUpload', () => {
   })
 
   it('should reject files larger than 10MB', async () => {
-    const { result } = renderHook(() => useFileUpload(), { wrapper: createWrapper() })
+    const { result } = renderHook(() => useFileUpload())
     const largeContent = new ArrayBuffer(11 * 1024 * 1024)
     const file = new File([largeContent], 'test.pdf', { type: 'application/pdf' })
 

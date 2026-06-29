@@ -1,30 +1,14 @@
 import { useCallback } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { createConversation, sendMessage as sendMessageApi } from '../api/chat'
-import type { Message } from '../api/types'
-
+import { sendMessage as sendMessageApi } from '../api/chat'
 
 export function useChat() {
   const { state, dispatch } = useChatContext()
 
   const sendMessage = useCallback(
     async (text: string) => {
-      const userMessage: Message = {
-        id: crypto.randomUUID(),
-        role: 'USER',
-        content: text,
-        timestamp: new Date().toISOString(),
-      }
-
-      dispatch({ type: 'ADD_MESSAGE', payload: userMessage })
       dispatch({ type: 'SET_LOADING', payload: true })
       dispatch({ type: 'SET_ERROR', payload: null })
-
-if (!state.activeId) {
-  const newConv = await createConversation('Nova conversa')
-  dispatch({ type: 'SELECT_CONVERSATION', payload: newConv.id })
-}
-
 
       try {
         const response = await sendMessageApi({
@@ -32,8 +16,13 @@ if (!state.activeId) {
           message: text,
         })
 
+        const botMessage = {
+          ...response.botMessage,
+          sources: response.sources,
+        }
+
         dispatch({ type: 'ADD_MESSAGE', payload: response.userMessage })
-        dispatch({ type: 'ADD_MESSAGE', payload: response.botMessage })
+        dispatch({ type: 'ADD_MESSAGE', payload: botMessage })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao enviar mensagem'
         dispatch({ type: 'SET_ERROR', payload: message })
