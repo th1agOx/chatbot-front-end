@@ -37,7 +37,7 @@ export interface FileInfo {
 }
 
 export interface ChatRequest {
-  conversationId: number | null
+  conversationId: number | string | null
   message: string
 }
 
