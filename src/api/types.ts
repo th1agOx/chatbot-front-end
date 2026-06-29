@@ -4,11 +4,20 @@ export interface Attachment {
   fileUrl: string
 }
 
+export interface SourceReference {
+  documentId: number
+  fileName: string
+  excerpt: string
+}
+
 export interface Message {
   id: string | number
   role: 'USER' | 'BOT'
   content: string
   timestamp: string
+  createdAt?: string
+  attachment?: Attachment | null
+  sources?: SourceReference[]
 }
 
 export interface Conversation {
@@ -27,14 +36,18 @@ export interface FileInfo {
   uploadedAt: string
 }
 
-export interface SendMessageRequest {
-  conversationId: string | null
+export interface ChatRequest {
+  conversationId: number | null
   message: string
 }
 
-export interface SendMessageResponse {
+export interface ChatResponse {
   userMessage: Message
   botMessage: Message
+  answer: string
+  sources: SourceReference[]
+  executionTimeMs: number
+  chunksConsumed: number
 }
 
 export interface GetConversationHistoryResponse {
@@ -43,17 +56,57 @@ export interface GetConversationHistoryResponse {
   messages: Message[]
 }
 
-export interface UploadDocumentResponse {
-  fileId: string
+export interface AttachmentResponse {
+  id: number
   fileName: string
-  fileType: 'txt' | 'pdf'
-  sizeBytes: number
+  contentType: string
+  size: number
+  uploadDate: string
+}
+
+export interface DocumentResponse {
+  id: number
+  fileName: string
+  contentType: string
+  fileSize: number
+  chunkCount: number
   uploadedAt: string
+}
+
+export interface LoginRequest {
+  email: string
+  password: string
+}
+
+export interface LoginResponse {
+  token: string
+  type: 'Bearer'
+}
+
+export interface UserCreateRequest {
+  email: string
+  password: string
+  displayName: string
+}
+
+export interface UserResponse {
+  id: number
+  email: string
+  displayName: string
+  createdAt: string
+}
+
+export interface ErrorResponse {
+  status: number
+  error: string
+  message: string
+  path: string
+  timestamp: string
 }
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: string| null
+  activeId: string | null
   messages: Message[]
   isLoading: boolean
   error: string | null
