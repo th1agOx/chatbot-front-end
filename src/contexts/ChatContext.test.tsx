@@ -35,7 +35,7 @@ describe('ChatContext', () => {
   it('should handle SET_MESSAGES', () => {
     const messages: Message[] = [
       { id: '1', role: 'USER', content: 'Hi', timestamp: '2024-01-01T00:00:00Z' },
-      { id: '2', role: 'ASSISTANT', content: 'Hello!', timestamp: '2024-01-01T00:00:01Z' },
+      { id: '2', role: 'BOT', content: 'Hello!', timestamp: '2024-01-01T00:00:01Z' },
     ]
     const state = chatReducer(initialState, { type: 'SET_MESSAGES', payload: messages })
     expect(state.messages).toHaveLength(2)
