@@ -15,9 +15,9 @@ const userMessage: Message = {
   timestamp: '2024-01-01T12:00:00Z',
 }
 
-const assistantMessage: Message = {
+const botMessage: Message = {
   id: '2',
-  role: 'ASSISTANT',
+  role: 'BOT',
   content: 'Como posso ajudar?',
   timestamp: '2024-01-01T12:00:01Z',
   attachment: {
@@ -25,6 +25,9 @@ const assistantMessage: Message = {
     fileType: 'pdf',
     fileUrl: 'http://example.com/doc.pdf',
   },
+  sources: [
+    { documentId: 1, fileName: 'doc.pdf', excerpt: 'Trecho relevante...' },
+  ],
 }
 
 describe('ChatMessage', () => {
@@ -33,14 +36,20 @@ describe('ChatMessage', () => {
     expect(screen.getByText('Olá')).toBeInTheDocument()
   })
 
-  it('should render assistant message content', () => {
-    renderWithTheme(<ChatMessage message={assistantMessage} isOwn={false} />)
+  it('should render bot message content', () => {
+    renderWithTheme(<ChatMessage message={botMessage} isOwn={false} />)
     expect(screen.getByText('Como posso ajudar?')).toBeInTheDocument()
   })
 
   it('should display attachment info when present', () => {
-    renderWithTheme(<ChatMessage message={assistantMessage} isOwn={false} />)
+    renderWithTheme(<ChatMessage message={botMessage} isOwn={false} />)
     expect(screen.getByText('documento.pdf')).toBeInTheDocument()
     expect(screen.getByText('PDF')).toBeInTheDocument()
+  })
+
+  it('should display sources when present', () => {
+    renderWithTheme(<ChatMessage message={botMessage} isOwn={false} />)
+    expect(screen.getByText('Fontes consultadas:')).toBeInTheDocument()
+    expect(screen.getByText('doc.pdf')).toBeInTheDocument()
   })
 })
