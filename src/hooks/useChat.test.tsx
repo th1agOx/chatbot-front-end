@@ -25,17 +25,26 @@ describe('useChat', () => {
     jest.clearAllMocks()
   })
 
-  it('should send a message and add user and assistant messages', async () => {
-    const mockReply = {
-      conversationId: 'conv-1',
-      reply: {
-        id: 'reply-1',
-        role: 'ASSISTANT',
-        content: 'Resposta do assistente',
-        timestamp: '2024-01-01T00:00:01Z',
+  it('should send a message and add user and bot messages', async () => {
+    const mockResponse = {
+      userMessage: {
+        id: 'msg-1',
+        role: 'USER',
+        content: 'Olá',
+        createdAt: '2024-01-01T00:00:00Z',
       },
+      botMessage: {
+        id: 'msg-2',
+        role: 'BOT',
+        content: 'Resposta do assistente',
+        createdAt: '2024-01-01T00:00:01Z',
+      },
+      answer: 'Resposta do assistente',
+      sources: [{ documentId: 1, fileName: 'doc.pdf', excerpt: 'Trecho...' }],
+      executionTimeMs: 1234,
+      chunksConsumed: 3,
     }
-    ;(chatApi.sendMessage as jest.Mock).mockResolvedValue(mockReply)
+    ;(chatApi.sendMessage as jest.Mock).mockResolvedValue(mockResponse)
 
     const { result } = renderHook(() => useChat(), { wrapper: createWrapper() })
 
@@ -49,8 +58,9 @@ describe('useChat', () => {
 
     expect(result.current.messages[0].role).toBe('USER')
     expect(result.current.messages[0].content).toBe('Olá')
-    expect(result.current.messages[1].role).toBe('ASSISTANT')
+    expect(result.current.messages[1].role).toBe('BOT')
     expect(result.current.messages[1].content).toBe('Resposta do assistente')
+    expect(result.current.messages[1].sources).toHaveLength(1)
     expect(result.current.isLoading).toBe(false)
     expect(result.current.error).toBeNull()
   })
