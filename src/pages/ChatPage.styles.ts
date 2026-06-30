@@ -38,3 +38,49 @@ export const ErrorBanner = styled.div`
   font-size: ${({ theme }) => theme.fontSize.sm};
   text-align: center;
 `
+// ChatPage.styles.ts — novos elementos
+
+export const HeaderAvatar = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  flex-shrink: 0;
+`
+
+export const HeaderInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+`
+
+export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+  padding: ${({ theme }) => theme.spacing.md} ${({ theme }) => theme.spacing.lg};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surface};
+  flex-shrink: 0;
+`
+
+export const HeaderName = styled.h1`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: 600;
+  color: ${({ theme }) => theme.colors.text};
+  margin: 0;
+`
+
+export const HeaderStatus = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: ${({ theme }) => theme.fontSize.xs};
+  color: ${({ theme }) => theme.colors.success};
+`
+
+export const StatusDot = styled.span`
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background-color: ${({ theme }) => theme.colors.success};
+`

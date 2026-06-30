@@ -34,7 +34,7 @@ export const Item = styled.li<{ $active: boolean }>`
         `
       : css`
           &:hover {
-            background-color: ${theme.colors.assistantBubble};
+            background-color: ${theme.colors.surfaceElevated};
           }
         `}
 `

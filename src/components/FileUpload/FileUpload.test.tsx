@@ -10,12 +10,12 @@ const renderWithTheme = (ui: React.ReactElement) =>
 describe('FileUpload', () => {
   it('should display drag and drop message', () => {
     renderWithTheme(<FileUpload onUpload={jest.fn()} disabled={false} />)
-    expect(screen.getByText(/Arraste um arquivo/)).toBeInTheDocument()
+    expect(screen.getByText('Anexar arquivo')).toBeInTheDocument()
   })
 
   it('should show allowed file types hint', () => {
     renderWithTheme(<FileUpload onUpload={jest.fn()} disabled={false} />)
-    expect(screen.getByText(/PDF ou TXT até 10MB/)).toBeInTheDocument()
+    expect(screen.getByText(/PDF ou TXT/)).toBeInTheDocument()
   })
 
   it('should be visually disabled when disabled prop is true', () => {

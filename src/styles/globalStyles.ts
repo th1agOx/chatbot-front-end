@@ -13,7 +13,7 @@ const GlobalStyles = createGlobalStyle`
   }
 
   body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     font-size: 16px;
     line-height: 1.5;
     color: ${({ theme }) => theme.colors.text};
@@ -40,6 +40,30 @@ const GlobalStyles = createGlobalStyle`
     max-width: 100%;
     display: block;
   }
+    :focus-visible {
+    outline: 3px solid ${({ theme }) => theme.colors.accent};
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+ 
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+
+
+
+<textarea
+  aria-label="Campo de mensagem"
+  aria-multiline="true"
+  aria-disabled={disabled}
+  aria-describedby={disabled ? "chat-disabled-reason" : undefined}
+/>
+
+
+<div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+  {isLoading ? 'Assistente está digitando...' : ''}
+</div>
 `
 
 export default GlobalStyles

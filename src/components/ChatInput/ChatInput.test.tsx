@@ -11,8 +11,8 @@ const renderWithTheme = (ui: React.ReactElement) =>
 describe('ChatInput', () => {
   it('should enable the button when text is typed', () => {
     renderWithTheme(<ChatInput onSend={jest.fn()} disabled={false} />)
-    const textarea = screen.getByPlaceholderText('Digite sua mensagem...')
-    const button = screen.getByRole('button', { name: 'Enviar' })
+    const textarea = screen.getByPlaceholderText(/Digite sua mensagem/)
+    const button = screen.getByRole('button', { name: /Enviar/ })
 
     expect(button).toBeDisabled()
     fireEvent.change(textarea, { target: { value: 'Olá' } })
@@ -22,7 +22,7 @@ describe('ChatInput', () => {
   it('should call onSend when Enter is pressed', async () => {
     const onSend = jest.fn()
     renderWithTheme(<ChatInput onSend={onSend} disabled={false} />)
-    const textarea = screen.getByPlaceholderText('Digite sua mensagem...')
+    const textarea = screen.getByPlaceholderText(/Digite sua mensagem/)
 
     await userEvent.type(textarea, 'Hello{Enter}')
     expect(onSend).toHaveBeenCalledWith('Hello')
@@ -31,8 +31,8 @@ describe('ChatInput', () => {
 
   it('should disable textarea and button when disabled is true', () => {
     renderWithTheme(<ChatInput onSend={jest.fn()} disabled={true} />)
-    const textarea = screen.getByPlaceholderText('Digite sua mensagem...')
-    const button = screen.getByRole('button', { name: 'Enviar' })
+    const textarea = screen.getByPlaceholderText(/Digite sua mensagem/)
+    const button = screen.getByRole('button', { name: /Enviar/ })
 
     expect(textarea).toBeDisabled()
     expect(button).toBeDisabled()

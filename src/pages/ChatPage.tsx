@@ -24,6 +24,17 @@ export default function ChatPage() {
         />
       </S.Sidebar>
       <S.Main>
+        <S.Header>
+  <S.HeaderAvatar aria-hidden="true">
+    {/* SVG do bot */}
+  </S.HeaderAvatar>
+  <S.HeaderInfo>
+    <S.HeaderName>Assistente de TI</S.HeaderName>
+    <S.HeaderStatus>
+      <S.StatusDot aria-hidden="true" /> Online
+    </S.HeaderStatus>
+  </S.HeaderInfo>
+</S.Header>
         {error && <S.ErrorBanner>{error}</S.ErrorBanner>}
         <ChatHistory messages={messages} isLoading={isLoading} />
         <S.InputArea>

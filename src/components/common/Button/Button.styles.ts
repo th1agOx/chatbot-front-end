@@ -27,7 +27,7 @@ export const Wrapper = styled.button<{ $variant: 'primary' | 'secondary' }>`
           color: ${theme.colors.text};
           border-color: ${theme.colors.border};
           &:hover:not(:disabled) {
-            background-color: ${theme.colors.assistantBubble};
+            background-color: ${theme.colors.surfaceElevated};
           }
         `}
 

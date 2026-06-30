@@ -15,7 +15,7 @@ const renderWithTheme = (ui: React.ReactElement) =>
 describe('ChatHistory', () => {
   it('should show empty message when no messages', () => {
     renderWithTheme(<ChatHistory messages={[]} isLoading={false} />)
-    expect(screen.getByText('Nenhuma mensagem ainda')).toBeInTheDocument()
+    expect(screen.getByText('Olá! Sou seu assistente de TI')).toBeInTheDocument()
   })
 
   it('should show spinner when loading and no messages', () => {

@@ -26,7 +26,8 @@ export const Wrapper = styled.div<{ $isDragging: boolean; $disabled: boolean }>`
   }
 `
 
-export const Icon = styled.div`
+export const UploadIcon = styled.div`
+  font-size: 1.5rem;
   opacity: 0.6;
 `
 
