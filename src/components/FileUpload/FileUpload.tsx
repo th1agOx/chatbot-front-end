@@ -1,6 +1,7 @@
-import { useRef, useState, type DragEvent } from 'react'
+// FileUpload.tsx — versão melhorada
+
+import { useRef, useState, type DragEvent, type KeyboardEvent } from 'react'
 import * as S from './FileUpload.styles'
-import FileIcon from '../common/FileIcon/FileIcon'
 import { validateFile } from '../../utils/fileValidation'
 
 interface FileUploadProps {
@@ -9,11 +10,7 @@ interface FileUploadProps {
   disabled: boolean
 }
 
-export default function FileUpload({
-  onUpload,
-  accept = '.txt,.pdf',
-  disabled,
-}: FileUploadProps) {
+export default function FileUpload({ onUpload, accept = '.txt,.pdf', disabled }: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -21,7 +18,7 @@ export default function FileUpload({
   const handleFile = (file: File) => {
     const validation = validateFile(file)
     if (!validation.valid) {
-      setError(validation.error)
+      setError(validation.error ?? 'Arquivo inválido')
       return
     }
     setError(null)
@@ -43,7 +40,17 @@ export default function FileUpload({
     if (file) handleFile(file)
   }
 
-  const handleClick = () => inputRef.current?.click()
+  const handleClick = () => {
+    if (!disabled) inputRef.current?.click()
+  }
+
+  // Suporte a teclado: Enter e Space ativam o input
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault()
+      handleClick()
+    }
+  }
 
   const handleChange = () => {
     const file = inputRef.current?.files?.[0]
@@ -58,6 +65,11 @@ export default function FileUpload({
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
       onClick={handleClick}
+      onKeyDown={handleKeyDown}
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-label="Anexar arquivo. Arraste e solte ou pressione Enter para abrir seletor de arquivo"
+      aria-disabled={disabled}
     >
       <input
         ref={inputRef}
@@ -66,15 +78,21 @@ export default function FileUpload({
         onChange={handleChange}
         hidden
         disabled={disabled}
+        aria-hidden="true"
+        tabIndex={-1}
       />
-      <S.Icon>
-        <FileIcon fileType="txt" />
-      </S.Icon>
+      <S.UploadIcon aria-hidden="true">
+        {isDragging ? '📂' : '📎'}
+      </S.UploadIcon>
       <S.Text>
-        {isDragging ? 'Solte o arquivo aqui' : 'Arraste um arquivo ou clique para enviar'}
+        {isDragging ? 'Solte para anexar' : 'Anexar arquivo'}
       </S.Text>
-      <S.Hint>PDF ou TXT até 10MB</S.Hint>
-      {error && <S.ErrorText>{error}</S.ErrorText>}
+      <S.Hint>PDF ou TXT · máx. 10 MB</S.Hint>
+      {error && (
+        <S.ErrorText role="alert" aria-live="assertive">
+          {error}
+        </S.ErrorText>
+      )}
     </S.Wrapper>
   )
 }
