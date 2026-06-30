@@ -19,26 +19,30 @@ Aplicação Single Page de chatbot com React 18, TypeScript, Context API + useRe
 | Estado Global | Context API + useReducer |
 | HTTP Client | Axios |
 | Testes | Jest + React Testing Library |
-| Linter | ESLint + Oxlint |
+| Linter | ESLint |
 | Formatação | Prettier |
 
 ## Estrutura
 
 ```
 src/
-├── api/            # Tipos, cliente Axios e funções de API
+├── api/              # Tipos, cliente Axios e funções de API
 ├── components/
-│   ├── common/     # Button, Spinner, ErrorBoundary, FileIcon
+│   ├── common/
+│   │   ├── Button/
+│   │   ├── ErrorBoundary/
+│   │   ├── FileIcon/
+│   │   └── Spinner/
 │   ├── ChatHistory/
 │   ├── ChatInput/
 │   ├── ChatMessage/
 │   ├── ConversationList/
 │   └── FileUpload/
-├── contexts/       # ChatContext (reducer + provider)
-├── hooks/          # useChat, useHistory, useFileUpload
-├── pages/          # ChatPage
-├── styles/         # Tema, tipos globais, global styles
-└── utils/          # Constantes, formatação, validação
+├── contexts/         # ChatContext (reducer + provider)
+├── hooks/            # useChat, useHistory, useFileUpload
+├── pages/            # ChatPage
+├── styles/           # Tema, tipos globais, global styles
+└── utils/            # Constantes, formatação, validação
 ```
 
 ## Pré-requisitos
@@ -80,7 +84,7 @@ npx jest src/hooks/useChat.test.tsx
 npx jest --coverage
 ```
 
-29 testes distribuídos em 9 suites cobrindo contexto, hooks e componentes.
+30 testes distribuídos em 9 suites cobrindo contexto, hooks e componentes. Todos os testes passam com build limpo (0 erros TypeScript, 0 warnings ESLint).
 
 ## Build
 
@@ -92,20 +96,47 @@ Gera o bundle otimizado em `dist/`.
 
 ## API
 
-A aplicação espera uma API REST em `http://localhost:3000` com os endpoints:
+A aplicação espera uma API REST em `http://localhost:8080` com os endpoints:
+
+### Autenticação
 
 | Método | Rota | Descrição |
 |--------|------|-----------|
-| POST | `/api/chat/send` | Envia mensagem |
-| GET | `/api/chat/conversations` | Lista conversas |
-| GET | `/api/chat/conversations/:id` | Histórico de conversa |
-| POST | `/api/chat/upload` | Upload de documento |
-| DELETE | `/api/chat/conversations/:id` | Exclui conversa |
+| POST | `/api/auth/login` | Login (retorna JWT) |
+| POST | `/api/users` | Criar usuário |
+| GET | `/api/users/me` | Perfil do usuário logado |
 
-## Estratégia de Commits
+### Conversas
 
-Consulte [docs/commits-strategy.md](docs/commits-strategy.md) para a organização das features em sprints com trabalho paralelo para 2 desenvolvedores.
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/api/conversations` | Criar conversa |
+| GET | `/api/conversations` | Listar conversas |
+| DELETE | `/api/conversations/:id` | Excluir conversa |
 
-## Review Técnica
+### Chat / Mensagens
 
-Consulte [docs/review.md](docs/review.md) para a análise completa de arquitetura, stack, performance e recomendações.
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/api/chat/send` | Enviar mensagem (RAG v2) |
+| GET | `/api/chat/history/:id` | Histórico de mensagens |
+
+### Upload
+
+| Método | Rota | Descrição |
+|--------|------|-----------|
+| POST | `/api/files/upload` | Upload de arquivo (legado) |
+| POST | `/api/documents/upload` | Upload de documento com IA |
+
+O contrato completo está em [docs/FRONTEND_API_CONTRACT.md](docs/FRONTEND_API_CONTRACT.md).
+
+## Documentação
+
+| Documento | Descrição |
+|-----------|-----------|
+| [docs/commits-strategy.md](docs/commits-strategy.md) | Estratégia de commits e organização em sprints |
+| [docs/review.md](docs/review.md) | Análise técnica de arquitetura, stack e performance |
+| [docs/FRONTEND_API_CONTRACT.md](docs/FRONTEND_API_CONTRACT.md) | Contrato completo da API REST |
+| [docs/cx_n1_design.md](docs/cx_n1_design.md) | Design system CX N1 |
+| [docs/system_specification.md](docs/system_specification.md) | Especificação do sistema |
+| [docs/system_specification_part2.md](docs/system_specification_part2.md) | Especificação complementar |
