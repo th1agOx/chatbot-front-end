@@ -21,10 +21,12 @@ export interface Message {
 }
 
 export interface Conversation {
-  id: string
+  id: number
   title: string
   lastMessageAt: string
   messageCount: number
+  createdAt?: string
+  updatedAt?: string
   messages?: Message[]
 }
 
@@ -106,7 +108,7 @@ export interface ErrorResponse {
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: string | null
+  activeId: number | null
   messages: Message[]
   isLoading: boolean
   error: string | null
@@ -118,4 +120,5 @@ export type ChatAction =
   | { type: 'ADD_MESSAGE'; payload: Message }
   | { type: 'SET_LOADING'; payload: boolean }
   | { type: 'SET_ERROR'; payload: string | null }
-  | { type: 'SELECT_CONVERSATION'; payload: string | null } 
+  | { type: 'SELECT_CONVERSATION'; payload: number | null }
+  | { type: 'DELETE_CONVERSATION'; payload: number } 

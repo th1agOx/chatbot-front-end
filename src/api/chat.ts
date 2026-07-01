@@ -34,6 +34,23 @@ export async function getConversationHistory(id: string): Promise<GetConversatio
   return response.data
 }
 
+export async function sendWithFile(
+  conversationId: number | null,
+  message: string,
+  file: File,
+): Promise<ChatResponse> {
+  const formData = new FormData()
+  formData.append('message', message)
+  if (conversationId != null) {
+    formData.append('conversationId', String(conversationId))
+  }
+  formData.append('file', file)
+  const response = await apiClient.post<ChatResponse>('/api/chat/send-with-file', formData, {
+    headers: { 'Content-Type': 'multipart/form-data' },
+  })
+  return response.data
+}
+
 export async function uploadLegacyFile(
   file: File,
   conversationId: string,

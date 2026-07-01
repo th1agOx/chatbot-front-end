@@ -3,7 +3,7 @@ import type { Conversation, Message, ChatAction } from '../api/types'
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: string| null
+  activeId: number | null
   messages: Message[]
   isLoading: boolean
   error: string | null
@@ -31,6 +31,13 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
       return { ...state, error: action.payload }
     case 'SELECT_CONVERSATION':
       return { ...state, activeId: action.payload, messages: [], error: null }
+    case 'DELETE_CONVERSATION':
+      return {
+        ...state,
+        conversations: state.conversations.filter(c => c.id !== action.payload),
+        activeId: state.activeId === action.payload ? null : state.activeId,
+        messages: state.activeId === action.payload ? [] : state.messages,
+      }
     default:
       return state
   }

@@ -14,7 +14,7 @@ describe('ChatContext', () => {
 
   it('should handle SET_CONVERSATIONS', () => {
     const conversations: Conversation[] = [
-      { id: '1', title: 'Test', lastMessageAt: '2024-01-01', messageCount: 1 },
+      { id: 1, title: 'Test', lastMessageAt: '2024-01-01', messageCount: 1 },
     ]
     const state = chatReducer(initialState, { type: 'SET_CONVERSATIONS', payload: conversations })
     expect(state.conversations).toEqual(conversations)
@@ -56,8 +56,8 @@ describe('ChatContext', () => {
       type: 'ADD_MESSAGE',
       payload: { id: '1', role: 'USER', content: 'Hi', timestamp: '' },
     })
-    const state = chatReducer(stateWithMessages, { type: 'SELECT_CONVERSATION', payload: '2' })
-    expect(state.activeId).toBe('2')
+    const state = chatReducer(stateWithMessages, { type: 'SELECT_CONVERSATION', payload: 2 })
+    expect(state.activeId).toBe(2)
     expect(state.messages).toHaveLength(0)
     expect(state.error).toBeNull()
   })

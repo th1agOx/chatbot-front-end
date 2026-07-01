@@ -20,7 +20,7 @@ describe('useHistory', () => {
 
   it('should load conversations on mount', async () => {
     const mockConversations = [
-      { id: '1', title: 'Conv 1', lastMessageAt: '2024-01-01T00:00:00Z', messageCount: 2 },
+      { id: 1, title: 'Conv 1', lastMessageAt: '2024-01-01T00:00:00Z', messageCount: 2 },
     ]
     ;(chatApi.listConversations as jest.Mock).mockResolvedValue(mockConversations)
 
@@ -41,6 +41,8 @@ describe('useHistory', () => {
     const mockHistory = {
       id: '1',
       title: 'Conv 1',
+      messageCount: 0,
+      lastMessageAt: '2024-01-01T00:00:00Z',
       messages: [
         { id: 'm1', role: 'USER', content: 'Hi', timestamp: '2024-01-01T00:00:00Z' },
       ],
@@ -54,9 +56,9 @@ describe('useHistory', () => {
     })
 
     await act(async () => {
-      await result.current.selectConversation('1')
+      await result.current.selectConversation(1)
     })
 
-    expect(result.current.activeId).toBe('1')
+    expect(result.current.activeId).toBe(1)
   })
 })

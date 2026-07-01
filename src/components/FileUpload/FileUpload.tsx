@@ -1,16 +1,22 @@
-// FileUpload.tsx — versão melhorada
-
 import { useRef, useState, type DragEvent, type KeyboardEvent } from 'react'
 import * as S from './FileUpload.styles'
 import { validateFile } from '../../utils/fileValidation'
 
 interface FileUploadProps {
-  onUpload: (file: File) => void
+  pendingFile: File | null
+  onFileSelect: (file: File) => void
+  onRemove: () => void
   accept?: string
   disabled: boolean
 }
 
-export default function FileUpload({ onUpload, accept = '.txt,.pdf', disabled }: FileUploadProps) {
+export default function FileUpload({
+  pendingFile,
+  onFileSelect,
+  onRemove,
+  accept = '.txt,.pdf',
+  disabled,
+}: FileUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null)
   const [isDragging, setIsDragging] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -22,7 +28,7 @@ export default function FileUpload({ onUpload, accept = '.txt,.pdf', disabled }:
       return
     }
     setError(null)
-    onUpload(file)
+    onFileSelect(file)
   }
 
   const handleDragOver = (e: DragEvent) => {
@@ -41,10 +47,9 @@ export default function FileUpload({ onUpload, accept = '.txt,.pdf', disabled }:
   }
 
   const handleClick = () => {
-    if (!disabled) inputRef.current?.click()
+    if (!disabled && !pendingFile) inputRef.current?.click()
   }
 
-  // Suporte a teclado: Enter e Space ativam o input
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault()
@@ -55,6 +60,27 @@ export default function FileUpload({ onUpload, accept = '.txt,.pdf', disabled }:
   const handleChange = () => {
     const file = inputRef.current?.files?.[0]
     if (file) handleFile(file)
+  }
+
+  if (pendingFile) {
+    return (
+      <S.BadgeWrapper>
+        <S.BadgeIcon aria-hidden="true">📎</S.BadgeIcon>
+        <S.BadgeText>{pendingFile.name}</S.BadgeText>
+        <S.RemoveButton
+          type="button"
+          onClick={(e) => { e.stopPropagation(); onRemove() }}
+          disabled={disabled}
+          aria-label="Remover arquivo"
+          title="Remover arquivo"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </S.RemoveButton>
+      </S.BadgeWrapper>
+    )
   }
 
   return (

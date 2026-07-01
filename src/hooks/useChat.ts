@@ -1,20 +1,22 @@
 import { useCallback } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { sendMessage as sendMessageApi } from '../api/chat'
+import { sendMessage as sendMessageApi, sendWithFile as sendWithFileApi } from '../api/chat'
 
 export function useChat() {
   const { state, dispatch } = useChatContext()
 
   const sendMessage = useCallback(
-    async (text: string) => {
+    async (text: string, file?: File | null) => {
       dispatch({ type: 'SET_LOADING', payload: true })
       dispatch({ type: 'SET_ERROR', payload: null })
 
       try {
-        const response = await sendMessageApi({
-          conversationId: state.activeId,
-          message: text,
-        })
+        const response = file
+          ? await sendWithFileApi(state.activeId, text, file)
+          : await sendMessageApi({
+              conversationId: state.activeId,
+              message: text,
+            })
 
         const botMessage = {
           ...response.botMessage,

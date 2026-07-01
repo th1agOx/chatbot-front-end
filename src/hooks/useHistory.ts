@@ -1,6 +1,11 @@
 import { useCallback, useEffect } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { listConversations, getConversationHistory, createConversation } from '../api/chat'
+import {
+  listConversations,
+  getConversationHistory,
+  createConversation,
+  deleteConversation as deleteConversationApi,
+} from '../api/chat'
 
 export function useHistory() {
   const { state, dispatch } = useChatContext()
@@ -21,13 +26,13 @@ export function useHistory() {
   }, [dispatch])
 
   const selectConversation = useCallback(
-    async (id: string) => {
+    async (id: number) => {
       dispatch({ type: 'SELECT_CONVERSATION', payload: id })
       dispatch({ type: 'SET_LOADING', payload: true })
       dispatch({ type: 'SET_ERROR', payload: null })
 
       try {
-        const history = await getConversationHistory(id.toString())
+        const history = await getConversationHistory(String(id))
         dispatch({ type: 'SET_MESSAGES', payload: history.messages })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao carregar histórico'
@@ -53,6 +58,19 @@ export function useHistory() {
     [dispatch, state.conversations],
   )
 
+  const deleteConversation = useCallback(
+    async (id: number) => {
+      try {
+        await deleteConversationApi(String(id))
+        dispatch({ type: 'DELETE_CONVERSATION', payload: id })
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Erro ao deletar conversa'
+        dispatch({ type: 'SET_ERROR', payload: message })
+      }
+    },
+    [dispatch],
+  )
+
   useEffect(() => {
     loadConversations()
   }, [loadConversations])
@@ -64,5 +82,6 @@ export function useHistory() {
     selectConversation,
     loadConversations,
     createConversation: createConversationFn,
+    deleteConversation,
   }
 }

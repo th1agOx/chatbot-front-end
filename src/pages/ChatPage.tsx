@@ -9,10 +9,15 @@ import { useFileUpload } from '../hooks/useFileUpload'
 
 export default function ChatPage() {
   const { messages, isLoading: chatLoading, error, sendMessage } = useChat()
-  const { conversations, activeId, isLoading: historyLoading, selectConversation } = useHistory()
-  const { isUploading, uploadFile } = useFileUpload()
+  const { conversations, activeId, isLoading: historyLoading, selectConversation, deleteConversation } = useHistory()
+  const { pendingFile, selectFile, clearPendingFile } = useFileUpload()
 
-  const isLoading = chatLoading || historyLoading || isUploading
+  const isLoading = chatLoading || historyLoading
+
+  const handleSend = (text: string) => {
+    sendMessage(text, pendingFile)
+    clearPendingFile()
+  }
 
   return (
     <S.Container>
@@ -20,26 +25,31 @@ export default function ChatPage() {
         <ConversationList
           conversations={conversations}
           onSelect={selectConversation}
+          onDelete={deleteConversation}
           activeId={activeId}
         />
       </S.Sidebar>
       <S.Main>
         <S.Header>
-  <S.HeaderAvatar aria-hidden="true">
-    {/* SVG do bot */}
-  </S.HeaderAvatar>
-  <S.HeaderInfo>
-    <S.HeaderName>Assistente de TI</S.HeaderName>
-    <S.HeaderStatus>
-      <S.StatusDot aria-hidden="true" /> Online
-    </S.HeaderStatus>
-  </S.HeaderInfo>
-</S.Header>
+          <S.HeaderAvatar aria-hidden="true">
+          </S.HeaderAvatar>
+          <S.HeaderInfo>
+            <S.HeaderName>Assistente de TI</S.HeaderName>
+            <S.HeaderStatus>
+              <S.StatusDot aria-hidden="true" /> Online
+            </S.HeaderStatus>
+          </S.HeaderInfo>
+        </S.Header>
         {error && <S.ErrorBanner>{error}</S.ErrorBanner>}
         <ChatHistory messages={messages} isLoading={isLoading} />
         <S.InputArea>
-          <FileUpload onUpload={uploadFile} disabled={isLoading} />
-          <ChatInput onSend={sendMessage} disabled={isLoading} />
+          <FileUpload
+            pendingFile={pendingFile}
+            onFileSelect={selectFile}
+            onRemove={clearPendingFile}
+            disabled={isLoading}
+          />
+          <ChatInput onSend={handleSend} disabled={isLoading} />
         </S.InputArea>
       </S.Main>
     </S.Container>
