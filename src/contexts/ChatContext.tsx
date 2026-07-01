@@ -21,6 +21,13 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
     case 'SET_CONVERSATIONS':
       return { ...state, conversations: action.payload }
+    case 'UPDATE_CONVERSATION':
+      return {
+        ...state,
+        conversations: state.conversations.map((c) =>
+          c.id === action.payload.id ? action.payload : c,
+        ),
+      }
     case 'SET_MESSAGES':
       return { ...state, messages: action.payload }
     case 'ADD_MESSAGE':

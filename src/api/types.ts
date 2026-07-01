@@ -24,6 +24,7 @@ export interface Conversation {
   id: string
   title: string
   lastMessageAt: string
+  updatedAt?: string
   messageCount: number
   messages?: Message[]
 }
@@ -114,6 +115,7 @@ export interface ChatState {
 
 export type ChatAction =
   | { type: 'SET_CONVERSATIONS'; payload: Conversation[] }
+  | { type: 'UPDATE_CONVERSATION'; payload: Conversation }
   | { type: 'SET_MESSAGES'; payload: Message[] }
   | { type: 'ADD_MESSAGE'; payload: Message }
   | { type: 'SET_LOADING'; payload: boolean }

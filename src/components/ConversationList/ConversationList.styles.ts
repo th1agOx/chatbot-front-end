@@ -20,6 +20,50 @@ export const List = styled.ul`
   overflow-y: auto;
 `
 
+export const ItemTitle = styled.p`
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: 500;
+  margin-bottom: ${({ theme }) => theme.spacing.xs};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`
+
+export const ItemTitleRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.xs};
+`
+
+export const EditInput = styled.input`
+  flex: 1;
+  font-size: ${({ theme }) => theme.fontSize.md};
+  font-weight: 500;
+  padding: 2px 4px;
+  border: 1px solid ${({ theme }) => theme.colors.primary};
+  border-radius: ${({ theme }) => theme.borderRadius.sm};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
+  outline: none;
+  font-family: inherit;
+`
+
+export const EditButton = styled.button`
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  font-size: ${({ theme }) => theme.fontSize.sm};
+  opacity: 0.5;
+  color: ${({ theme }) => theme.colors.textSecondary};
+
+  &:hover {
+    opacity: 1;
+    color: ${({ theme }) => theme.colors.primary};
+  }
+`
+
 export const Item = styled.li<{ $active: boolean }>`
   padding: ${({ theme }) => theme.spacing.md};
   cursor: pointer;
@@ -37,15 +81,10 @@ export const Item = styled.li<{ $active: boolean }>`
             background-color: ${theme.colors.surfaceElevated};
           }
         `}
-`
 
-export const ItemTitle = styled.p`
-  font-size: ${({ theme }) => theme.fontSize.md};
-  font-weight: 500;
-  margin-bottom: ${({ theme }) => theme.spacing.xs};
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  &:hover ${EditButton} {
+    display: inline-flex;
+  }
 `
 
 export const ItemMeta = styled.div`

@@ -51,7 +51,9 @@ function ChatMessage({ message, isOwn }: ChatMessageProps) {
         )}
 
         <S.Timestamp>
-          <time dateTime={message.timestamp}>{formatDate(message.timestamp)}</time>
+          <time dateTime={message.createdAt ?? message.timestamp}>
+            {formatDate(message.createdAt ?? message.timestamp)}
+          </time>
         </S.Timestamp>
       </S.Bubble>
     </S.Wrapper>

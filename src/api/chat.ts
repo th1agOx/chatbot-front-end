@@ -13,6 +13,12 @@ import type {
 } from './types'
 
 
+export async function updateConversation(id: string, title: string): Promise<Conversation> {
+  const response = await apiClient.put<Conversation>(`/api/conversations/${id}`, { title })
+  return response.data
+}
+
+
 export async function createConversation(title: string): Promise<Conversation> {
   const response = await apiClient.post<Conversation>('/api/conversations', { title })
   return response.data

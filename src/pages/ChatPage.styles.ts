@@ -84,3 +84,10 @@ export const StatusDot = styled.span`
   border-radius: 50%;
   background-color: ${({ theme }) => theme.colors.success};
 `
+
+export const HeaderActions = styled.div`
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: ${({ theme }) => theme.spacing.sm};
+`

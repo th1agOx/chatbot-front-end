@@ -1,5 +1,12 @@
-export function formatDate(isoString: string): string {
+function safeParse(isoString: string): Date | null {
+  if (!isoString) return null
   const date = new Date(isoString)
+  return isNaN(date.getTime()) ? null : date
+}
+
+export function formatDate(isoString: string): string {
+  const date = safeParse(isoString)
+  if (!date) return '---'
   return date.toLocaleDateString('pt-BR', {
     day: '2-digit',
     month: '2-digit',
@@ -10,7 +17,8 @@ export function formatDate(isoString: string): string {
 }
 
 export function formatShortDate(isoString: string): string {
-  const date = new Date(isoString)
+  const date = safeParse(isoString)
+  if (!date) return '---'
   const now = new Date()
   const diffMs = now.getTime() - date.getTime()
   const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24))
