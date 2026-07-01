@@ -3,7 +3,7 @@ import type { Conversation, Message, ChatAction } from '../api/types'
 
 export interface ChatState {
   conversations: Conversation[]
-  activeId: number | null
+  activeId: string | number | null
   messages: Message[]
   isLoading: boolean
   error: string | null
@@ -21,6 +21,13 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
   switch (action.type) {
     case 'SET_CONVERSATIONS':
       return { ...state, conversations: action.payload }
+    case 'UPDATE_CONVERSATION':
+      return {
+        ...state,
+        conversations: state.conversations.map((c) =>
+          c.id === action.payload.id ? { ...c, ...action.payload } : c,
+        ),
+      }
     case 'SET_MESSAGES':
       return { ...state, messages: action.payload }
     case 'ADD_MESSAGE':
@@ -34,9 +41,9 @@ export function chatReducer(state: ChatState, action: ChatAction): ChatState {
     case 'DELETE_CONVERSATION':
       return {
         ...state,
-        conversations: state.conversations.filter(c => c.id !== action.payload),
-        activeId: state.activeId === action.payload ? null : state.activeId,
-        messages: state.activeId === action.payload ? [] : state.messages,
+        conversations: state.conversations.filter(c => c.id != action.payload),
+        activeId: state.activeId == action.payload ? null : state.activeId,
+        messages: state.activeId == action.payload ? [] : state.messages,
       }
     default:
       return state

@@ -9,7 +9,7 @@ import { useFileUpload } from '../hooks/useFileUpload'
 
 export default function ChatPage() {
   const { messages, isLoading: chatLoading, error, sendMessage } = useChat()
-  const { conversations, activeId, isLoading: historyLoading, selectConversation, deleteConversation } = useHistory()
+  const { conversations, activeId, isLoading: historyLoading, selectConversation, deleteConversation, renameConversation } = useHistory()
   const { pendingFile, selectFile, clearPendingFile } = useFileUpload()
 
   const isLoading = chatLoading || historyLoading
@@ -26,6 +26,7 @@ export default function ChatPage() {
           conversations={conversations}
           onSelect={selectConversation}
           onDelete={deleteConversation}
+          onRename={renameConversation}
           activeId={activeId}
         />
       </S.Sidebar>

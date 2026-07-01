@@ -3,7 +3,7 @@ import type {
   ChatRequest,
   ChatResponse,
   Conversation,
-  GetConversationHistoryResponse,
+  Message,
   DocumentResponse,
   AttachmentResponse,
   LoginRequest,
@@ -11,6 +11,12 @@ import type {
   UserCreateRequest,
   UserResponse,
 } from './types'
+
+
+export async function updateConversation(id: string | number, title: string): Promise<Conversation> {
+  const response = await apiClient.put<Conversation>(`/api/conversations/${id}`, { title })
+  return response.data
+}
 
 
 export async function createConversation(title: string): Promise<Conversation> {
@@ -29,13 +35,13 @@ export async function listConversations(): Promise<Conversation[]> {
   return response.data
 }
 
-export async function getConversationHistory(id: string): Promise<GetConversationHistoryResponse> {
-  const response = await apiClient.get<GetConversationHistoryResponse>(`/api/chat/history/${id}`)
+export async function getConversationHistory(id: string | number): Promise<Message[]> {
+  const response = await apiClient.get<Message[]>(`/api/chat/history/${id}`)
   return response.data
 }
 
 export async function sendWithFile(
-  conversationId: number | null,
+  conversationId: string | number | null,
   message: string,
   file: File,
 ): Promise<ChatResponse> {
@@ -59,9 +65,7 @@ export async function uploadLegacyFile(
   formData.append('file', file)
   formData.append('conversationId', conversationId)
 
-  const response = await apiClient.post<AttachmentResponse>('/api/files/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const response = await apiClient.post<AttachmentResponse>('/api/files/upload', formData)
   return response.data
 }
 
@@ -69,13 +73,11 @@ export async function uploadAI(file: File): Promise<DocumentResponse> {
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await apiClient.post<DocumentResponse>('/api/documents/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const response = await apiClient.post<DocumentResponse>('/api/documents/upload', formData)
   return response.data
 }
 
-export async function deleteConversation(id: string): Promise<void> {
+export async function deleteConversation(id: string | number): Promise<void> {
   await apiClient.delete(`/api/conversations/${id}`)
 }
 
