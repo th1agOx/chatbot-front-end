@@ -1,6 +1,11 @@
 import { useCallback, useEffect } from 'react'
 import { useChatContext } from '../contexts/ChatContext'
-import { listConversations, getConversationHistory, createConversation } from '../api/chat'
+import {
+  listConversations,
+  getConversationHistory,
+  createConversation,
+  updateConversation,
+} from '../api/chat'
 
 export function useHistory() {
   const { state, dispatch } = useChatContext()
@@ -53,6 +58,19 @@ export function useHistory() {
     [dispatch, state.conversations],
   )
 
+  const renameConversation = useCallback(
+    async (id: string, newTitle: string) => {
+      try {
+        const updated = await updateConversation(id, newTitle)
+        dispatch({ type: 'UPDATE_CONVERSATION', payload: updated })
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Erro ao renomear conversa'
+        dispatch({ type: 'SET_ERROR', payload: message })
+      }
+    },
+    [dispatch],
+  )
+
   useEffect(() => {
     loadConversations()
   }, [loadConversations])
@@ -64,5 +82,6 @@ export function useHistory() {
     selectConversation,
     loadConversations,
     createConversation: createConversationFn,
+    renameConversation,
   }
 }

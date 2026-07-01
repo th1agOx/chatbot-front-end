@@ -3,13 +3,14 @@ import ConversationList from '../components/ConversationList/ConversationList'
 import ChatHistory from '../components/ChatHistory/ChatHistory'
 import ChatInput from '../components/ChatInput/ChatInput'
 import FileUpload from '../components/FileUpload/FileUpload'
+import ThemeToggle from '../components/common/ThemeToggle/ThemeToggle'
 import { useChat } from '../hooks/useChat'
 import { useHistory } from '../hooks/useHistory'
 import { useFileUpload } from '../hooks/useFileUpload'
 
 export default function ChatPage() {
   const { messages, isLoading: chatLoading, error, sendMessage } = useChat()
-  const { conversations, activeId, isLoading: historyLoading, selectConversation } = useHistory()
+  const { conversations, activeId, isLoading: historyLoading, selectConversation, renameConversation } = useHistory()
   const { isUploading, uploadFile } = useFileUpload()
 
   const isLoading = chatLoading || historyLoading || isUploading
@@ -20,6 +21,7 @@ export default function ChatPage() {
         <ConversationList
           conversations={conversations}
           onSelect={selectConversation}
+          onRename={renameConversation}
           activeId={activeId}
         />
       </S.Sidebar>
@@ -34,6 +36,9 @@ export default function ChatPage() {
       <S.StatusDot aria-hidden="true" /> Online
     </S.HeaderStatus>
   </S.HeaderInfo>
+  <S.HeaderActions>
+    <ThemeToggle />
+  </S.HeaderActions>
 </S.Header>
         {error && <S.ErrorBanner>{error}</S.ErrorBanner>}
         <ChatHistory messages={messages} isLoading={isLoading} />

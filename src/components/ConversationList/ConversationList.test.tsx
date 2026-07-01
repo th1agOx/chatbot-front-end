@@ -16,14 +16,14 @@ const conversations: Conversation[] = [
 describe('ConversationList', () => {
   it('should show empty message when no conversations', () => {
     renderWithTheme(
-      <ConversationList conversations={[]} onSelect={jest.fn()} activeId={null} />,
+      <ConversationList conversations={[]} onSelect={jest.fn()} onRename={jest.fn()} activeId={null} />,
     )
     expect(screen.getByText('Nenhuma conversa')).toBeInTheDocument()
   })
 
   it('should render conversation items', () => {
     renderWithTheme(
-      <ConversationList conversations={conversations} onSelect={jest.fn()} activeId={null} />,
+      <ConversationList conversations={conversations} onSelect={jest.fn()} onRename={jest.fn()} activeId={null} />,
     )
     expect(screen.getByText('Conversa 1')).toBeInTheDocument()
     expect(screen.getByText('Conversa 2')).toBeInTheDocument()
@@ -32,9 +32,60 @@ describe('ConversationList', () => {
   it('should call onSelect when an item is clicked', () => {
     const onSelect = jest.fn()
     renderWithTheme(
-      <ConversationList conversations={conversations} onSelect={onSelect} activeId={null} />,
+      <ConversationList conversations={conversations} onSelect={onSelect} onRename={jest.fn()} activeId={null} />,
     )
     fireEvent.click(screen.getByText('Conversa 1'))
     expect(onSelect).toHaveBeenCalledWith('1')
+  })
+
+  it('should enter edit mode when edit button is clicked', () => {
+    const onRename = jest.fn()
+    renderWithTheme(
+      <ConversationList conversations={conversations} onSelect={jest.fn()} onRename={onRename} activeId={null} />,
+    )
+    const editButtons = screen.getAllByTitle('Renomear')
+    fireEvent.click(editButtons[0])
+    const input = screen.getByDisplayValue('Conversa 1')
+    expect(input).toBeInTheDocument()
+  })
+
+  it('should call onRename with new title on Enter', () => {
+    const onRename = jest.fn()
+    renderWithTheme(
+      <ConversationList conversations={conversations} onSelect={jest.fn()} onRename={onRename} activeId={null} />,
+    )
+    const editButtons = screen.getAllByTitle('Renomear')
+    fireEvent.click(editButtons[0])
+    const input = screen.getByDisplayValue('Conversa 1')
+    fireEvent.change(input, { target: { value: 'Novo Título' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    expect(onRename).toHaveBeenCalledWith('1', 'Novo Título')
+  })
+
+  it('should not call onRename for empty title', () => {
+    const onRename = jest.fn()
+    renderWithTheme(
+      <ConversationList conversations={conversations} onSelect={jest.fn()} onRename={onRename} activeId={null} />,
+    )
+    const editButtons = screen.getAllByTitle('Renomear')
+    fireEvent.click(editButtons[0])
+    const input = screen.getByDisplayValue('Conversa 1')
+    fireEvent.change(input, { target: { value: '   ' } })
+    fireEvent.keyDown(input, { key: 'Enter' })
+    expect(onRename).not.toHaveBeenCalled()
+  })
+
+  it('should cancel editing on Escape', () => {
+    const onRename = jest.fn()
+    renderWithTheme(
+      <ConversationList conversations={conversations} onSelect={jest.fn()} onRename={onRename} activeId={null} />,
+    )
+    const editButtons = screen.getAllByTitle('Renomear')
+    fireEvent.click(editButtons[0])
+    const input = screen.getByDisplayValue('Conversa 1')
+    fireEvent.change(input, { target: { value: 'Novo Título' } })
+    fireEvent.keyDown(input, { key: 'Escape' })
+    expect(onRename).not.toHaveBeenCalled()
+    expect(screen.getByText('Conversa 1')).toBeInTheDocument()
   })
 })
