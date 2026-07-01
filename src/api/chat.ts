@@ -3,7 +3,7 @@ import type {
   ChatRequest,
   ChatResponse,
   Conversation,
-  GetConversationHistoryResponse,
+  Message,
   DocumentResponse,
   AttachmentResponse,
   LoginRequest,
@@ -35,8 +35,8 @@ export async function listConversations(): Promise<Conversation[]> {
   return response.data
 }
 
-export async function getConversationHistory(id: string): Promise<GetConversationHistoryResponse> {
-  const response = await apiClient.get<GetConversationHistoryResponse>(`/api/chat/history/${id}`)
+export async function getConversationHistory(id: string | number): Promise<Message[]> {
+  const response = await apiClient.get<Message[]>(`/api/chat/history/${id}`)
   return response.data
 }
 
@@ -48,9 +48,7 @@ export async function uploadLegacyFile(
   formData.append('file', file)
   formData.append('conversationId', conversationId)
 
-  const response = await apiClient.post<AttachmentResponse>('/api/files/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const response = await apiClient.post<AttachmentResponse>('/api/files/upload', formData)
   return response.data
 }
 
@@ -58,9 +56,7 @@ export async function uploadAI(file: File): Promise<DocumentResponse> {
   const formData = new FormData()
   formData.append('file', file)
 
-  const response = await apiClient.post<DocumentResponse>('/api/documents/upload', formData, {
-    headers: { 'Content-Type': 'multipart/form-data' },
-  })
+  const response = await apiClient.post<DocumentResponse>('/api/documents/upload', formData)
   return response.data
 }
 
