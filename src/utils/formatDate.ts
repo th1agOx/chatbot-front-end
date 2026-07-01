@@ -1,10 +1,15 @@
-function safeParse(isoString: string): Date | null {
+function safeParse(isoString: string | number | null | undefined): Date | null {
+  if (isoString == null) return null
+  if (typeof isoString === 'number') {
+    const d = new Date(isoString)
+    return isNaN(d.getTime()) ? null : d
+  }
   if (!isoString) return null
-  const date = new Date(isoString)
-  return isNaN(date.getTime()) ? null : date
+  const d = new Date(isoString)
+  return isNaN(d.getTime()) ? null : d
 }
 
-export function formatDate(isoString: string): string {
+export function formatDate(isoString: string | number | null | undefined): string {
   const date = safeParse(isoString)
   if (!date) return '---'
   return date.toLocaleDateString('pt-BR', {
@@ -16,7 +21,7 @@ export function formatDate(isoString: string): string {
   })
 }
 
-export function formatShortDate(isoString: string): string {
+export function formatShortDate(isoString: string | number | null | undefined): string {
   const date = safeParse(isoString)
   if (!date) return '---'
   const now = new Date()

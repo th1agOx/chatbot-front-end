@@ -5,9 +5,9 @@ import { formatShortDate } from '../../utils/formatDate'
 
 interface ConversationListProps {
   conversations: Conversation[]
-  onSelect: (id: string) => void
-  onRename: (id: string, newTitle: string) => void
-  activeId: string | null
+  onSelect: (id: string | number) => void
+  onRename: (id: string | number, newTitle: string) => void
+  activeId: string | number | null
 }
 
 export default function ConversationList({
@@ -16,11 +16,11 @@ export default function ConversationList({
   onRename,
   activeId,
 }: ConversationListProps) {
-  const [editingId, setEditingId] = useState<string | null>(null)
+  const [editingId, setEditingId] = useState<string | number | null>(null)
   const [editValue, setEditValue] = useState('')
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const startEditing = useCallback((id: string, currentTitle: string) => {
+  const startEditing = useCallback((id: string | number, currentTitle: string) => {
     setEditingId(id)
     setEditValue(currentTitle)
     requestAnimationFrame(() => inputRef.current?.focus())
@@ -32,7 +32,7 @@ export default function ConversationList({
   }, [])
 
   const saveEditing = useCallback(
-    (id: string) => {
+    (id: string | number) => {
       const trimmed = editValue.trim()
       if (trimmed) {
         onRename(id, trimmed)
@@ -93,8 +93,8 @@ export default function ConversationList({
                 </S.ItemTitleRow>
               )}
               <S.ItemMeta>
-                <span>{conv.messageCount} mensagens</span>
-                <span>{formatShortDate(conv.updatedAt ?? conv.lastMessageAt)}</span>
+                <span>{conv.messageCount ?? 0} mensagens</span>
+                <span>{formatShortDate(conv.updatedAt ?? conv.lastMessageAt ?? '')}</span>
               </S.ItemMeta>
             </S.Item>
           )

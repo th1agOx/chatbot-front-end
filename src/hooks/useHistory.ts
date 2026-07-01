@@ -26,14 +26,14 @@ export function useHistory() {
   }, [dispatch])
 
   const selectConversation = useCallback(
-    async (id: string) => {
+    async (id: string | number) => {
       dispatch({ type: 'SELECT_CONVERSATION', payload: id })
       dispatch({ type: 'SET_LOADING', payload: true })
       dispatch({ type: 'SET_ERROR', payload: null })
 
       try {
-        const history = await getConversationHistory(id.toString())
-        dispatch({ type: 'SET_MESSAGES', payload: history.messages })
+        const messages = await getConversationHistory(String(id))
+        dispatch({ type: 'SET_MESSAGES', payload: messages })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao carregar histórico'
         dispatch({ type: 'SET_ERROR', payload: message })
@@ -59,9 +59,9 @@ export function useHistory() {
   )
 
   const renameConversation = useCallback(
-    async (id: string, newTitle: string) => {
+    async (id: string | number, newTitle: string) => {
       try {
-        const updated = await updateConversation(id, newTitle)
+        const updated = await updateConversation(String(id), newTitle)
         dispatch({ type: 'UPDATE_CONVERSATION', payload: updated })
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Erro ao renomear conversa'
